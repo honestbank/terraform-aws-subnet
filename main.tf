@@ -13,6 +13,16 @@ terraform {
   }
 }
 
+
+provider "aws" {
+  region = var.aws_region
+  alias  = "target"
+  assume_role {
+    role_arn = var.aws_role_arn
+  }
+}
+
+
 module "aws-subnet" {
   source = "./aws-subnet"
 
