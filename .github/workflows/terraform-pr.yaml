@@ -3,10 +3,9 @@ on:
   pull_request:
     branches: [test, dev, qa, prod, main]
 env:
-  AWS_ACCESS_KEY_ID: ${{ secrets.TERRATEST_AWS_ACCESS_KEY_ID }}
-  AWS_SECRET_KEY: ${{ secrets.TERRATEST_AWS_SECRET_ACCESS_KEY }}
-  AWS_DEFAULT_REGION: ${{ secrets.TERRATEST_AWS_REGION }}
-  AWS_REGION: ${{ secrets.TERRATEST_AWS_REGION }}
+  tf_version: "latest"
+  tf_working_dir: "."
+  TF_WORKSPACE: ${{ github.base_ref }}
 jobs:
   checkov:
     name: checkov
@@ -22,24 +21,58 @@ jobs:
         uses: bridgecrewio/checkov-action@master
         with:
           download_external_modules: true
-  terratest:
-    name: terratest
+  terraform:
+    name: "terraform-pr"
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          submodules: "recursive"
+          token: ${{ secrets.ENGINEERING_GITHUB_PERSONAL_ACCESS_TOKEN }}
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@v1
+        with:
+          cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
+      - name: Terraform Format
+        id: fmt
+        run: terraform fmt
+        continue-on-error: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.ENGINEERING_GITHUB_PERSONAL_ACCESS_TOKEN }}
       - name: Terraform Init
         id: init
         run: terraform init
-      - name: Check out code into the Go module directory
-        uses: actions/checkout@v2
+      - name: Terraform Validate
+        id: validate
+        run: terraform validate -no-color
+      - name: Terraform Plan
+        id: plan
+        run: terraform plan -no-color
+        continue-on-error: true
+      - uses: actions/github-script@v4
+        if: github.event_name == 'pull_request'
+        env:
+          PLAN: "terraform\n${{ steps.plan.outputs.stdout }}"
         with:
-          submodules: true
-      - name: Set up Go (1.16)
-        uses: actions/setup-go@v2
-        with:
-          go-version: 1.16
-        id: go
-      - name: Run 'go test -v -timeout 30m'
-        run: |
-          cd test
-          go mod download
-          go test -v -timeout 30m
+          github-token: ${{ secrets.ENGINEERING_GITHUB_PERSONAL_ACCESS_TOKEN }}
+          script: |
+            const output = `#### Terraform Format and Style 🖌\`${{ steps.fmt.outcome }}\`
+            #### Terraform Initialization ⚙️\`${{ steps.init.outcome }}\`
+            #### Terraform Validation 🤖${{ steps.validate.outputs.stdout }}
+            #### Terraform Plan 📖\`${{ steps.plan.outcome }}\`
+
+            <details><summary>Show Plan</summary>
+
+            \`\`\`${process.env.PLAN}\`\`\`
+
+            </details>
+
+            *Pusher: @${{ github.actor }}, Action: \`${{ github.event_name }}\`, Working Directory: \`${{ env.tf_actions_working_dir }}\`, Workflow: \`${{ github.workflow }}\`*`;
+              
+            github.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: output
+            })
