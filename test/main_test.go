@@ -7,8 +7,10 @@ import (
 	"os"
 	"testing"
 
+	"github.com/gruntwork-io/terratest/modules/aws"
 	test_structure "github.com/gruntwork-io/terratest/modules/files"
 	"github.com/gruntwork-io/terratest/modules/terraform"
+	"github.com/stretchr/testify/assert"
 )
 
 const localBackend = `
@@ -41,6 +43,7 @@ const tfWorkspaceEnvVarName = "TF_WORKSPACE"
 const targetWorkspace = "test"
 
 func TestTerraformCodeInfrastructureInitialCredentials(t *testing.T) {
+	Region := "ap-southeast-1"
 	terraformTempDir, errSettingUpTest := setupTest()
 	if errSettingUpTest != nil {
 		t.Fatalf("Error setting up test :%v", errSettingUpTest)
@@ -74,4 +77,23 @@ func TestTerraformCodeInfrastructureInitialCredentials(t *testing.T) {
 	} else {
 		t.Log(fmt.Sprintf("Plan worked: %s", plan))
 	}
+
+	t.Run("Test Subnet exists", func(t *testing.T) {
+		a := assert.New(t)
+		//aws.GetVpcById(os.Getenv())
+		var vars map[string]interface{}
+		terraform.GetAllVariablesFromVarFile(t, "terratest.tfvars", &vars)
+		testme := vars["vpc_id"].(string)
+		println(testme)
+		aws.CreateAwsSessionWithCreds(os.Getenv("AWS_ACCESS_KEY_ID"), os.Getenv("AWS_SECRET_ACCESS_KEY"), Region)
+		subnets := aws.GetSubnetsForVpc(t, vars["vpc_id"].(string), Region)
+		exists := false
+		println(vars["subnet_name"])
+		for _, subnet := range subnets {
+			if subnet.Tags["Name"] == vars["subnet_name"].(string) {
+				exists = true
+			}
+		}
+		a.Equal(true, exists)
+	})
 }
