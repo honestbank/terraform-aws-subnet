@@ -2,7 +2,6 @@ name: "Terratest GitHub Action"
 on:
   pull_request:
     branches: [test, dev, qa, prod, main]
-  branches: [test, dev, qa, prod, main]
 env:
   AWS_ACCESS_KEY_ID: ${{ secrets.TERRATEST_AWS_ACCESS_KEY_ID }}
   AWS_SECRET_KEY: ${{ secrets.TERRATEST_AWS_SECRET_ACCESS_KEY }}
