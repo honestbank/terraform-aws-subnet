@@ -77,16 +77,16 @@ func TestTerraformCodeInfrastructureInitialCredentials(t *testing.T) {
 	} else {
 		t.Log(fmt.Sprintf("Plan worked: %s", plan))
 	}
-
+	vpc_id := terraform.Output(t, terraformValidateOptions, "vpc_id")
 	t.Run("Test Subnet exists", func(t *testing.T) {
 		a := assert.New(t)
 		//aws.GetVpcById(os.Getenv())
 		var vars map[string]interface{}
 		terraform.GetAllVariablesFromVarFile(t, "terratest.tfvars", &vars)
-		testme := vars["vpc_id"].(string)
+		testme := vpc_id
 		println(testme)
 		aws.CreateAwsSessionWithCreds(os.Getenv("AWS_ACCESS_KEY_ID"), os.Getenv("AWS_SECRET_ACCESS_KEY"), Region)
-		subnets := aws.GetSubnetsForVpc(t, vars["vpc_id"].(string), Region)
+		subnets := aws.GetSubnetsForVpc(t, vpc_id, Region)
 		exists := false
 		println(vars["subnet_name"])
 		for _, subnet := range subnets {

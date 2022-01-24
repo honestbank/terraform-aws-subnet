@@ -24,6 +24,7 @@ provider "aws" {
 
 resource "aws_vpc" "main" {
   cidr_block = "10.0.0.0/16"
+  enable_flow_log = true
 }
 
 module "aws-subnet" {
@@ -35,4 +36,9 @@ module "aws-subnet" {
   aws_region        = var.aws_region
   aws_role_arn      = var.aws_role_arn
   subnet_tags       = var.subnet_tags
+}
+
+
+output "vpc_id" {
+  value = aws_vpc.main.id
 }
