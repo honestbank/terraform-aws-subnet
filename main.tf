@@ -22,12 +22,15 @@ provider "aws" {
   }
 }
 
+resource "aws_vpc" "main" {
+  cidr_block = "10.0.0.0/16"
+}
 
 module "aws-subnet" {
   source = "./aws-subnet"
 
   subnet_cidr_block = var.subnet_cidr_block
-  vpc_id            = var.vpc_id
+  vpc_id            = main.id
   subnet_name       = var.subnet_name
   aws_region        = var.aws_region
   aws_role_arn      = var.aws_role_arn
