@@ -31,6 +31,17 @@ resource "aws_flow_log" "example" {
   vpc_id          = aws_vpc.main.id
 }
 
+resource "aws_security_group" "allow_tls" {
+  name        = "disable_traffic"
+  description = "disable all traffic"
+  vpc_id      = aws_vpc.main.id
+
+
+  tags = {
+    Name = "disable_traffic"
+  }
+}
+
 module "aws-subnet" {
   source = "./aws-subnet"
 
