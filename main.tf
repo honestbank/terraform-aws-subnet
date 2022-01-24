@@ -30,7 +30,7 @@ module "aws-subnet" {
   source = "./aws-subnet"
 
   subnet_cidr_block = var.subnet_cidr_block
-  vpc_id            = main.id
+  vpc_id            = aws_vpc.main.id
   subnet_name       = var.subnet_name
   aws_region        = var.aws_region
   aws_role_arn      = var.aws_role_arn
