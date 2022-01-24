@@ -22,24 +22,9 @@ provider "aws" {
   }
 }
 
+#checkov:skip=CKV2_AWS_11
 resource "aws_vpc" "main" {
   cidr_block = var.vpc_cidr
-}
-
-resource "aws_flow_log" "example" {
-  traffic_type    = "ALL"
-  vpc_id          = aws_vpc.main.id
-}
-
-resource "aws_security_group" "allow_tls" {
-  name        = "disable_traffic"
-  description = "disable all traffic"
-  vpc_id      = aws_vpc.main.id
-
-
-  tags = {
-    Name = "disable_traffic"
-  }
 }
 
 module "aws-subnet" {
