@@ -37,6 +37,7 @@ resource "aws_subnet" "main" {
   vpc_id     = data.aws_vpc.vpc.id
   cidr_block = var.subnet_cidr_block
 
+  map_public_ip_on_launch = false
   tags = merge({
     Name = var.subnet_name
     CreatedBy = "terraform-aws-subnet"
