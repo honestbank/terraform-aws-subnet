@@ -26,6 +26,11 @@ resource "aws_vpc" "main" {
   cidr_block = var.vpc_cidr
 }
 
+resource "aws_flow_log" "example" {
+  traffic_type    = "ALL"
+  vpc_id          = aws_vpc.main.id
+}
+
 module "aws-subnet" {
   source = "./aws-subnet"
 
