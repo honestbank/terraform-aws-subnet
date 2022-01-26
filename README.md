@@ -4,7 +4,7 @@ A simple module that creates subnets for you.
 
 ## How to use:
 
-Make sure you have a vpc and know what region you are in.
+Make sure you have a VPC and know what region you are in.
 
 Apply below module:
 
@@ -33,7 +33,6 @@ module "aws-subnet" {
 |------|---------|
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | ~> 1.0 |
 | <a name="requirement_aws"></a> [aws](#requirement\_aws) | ~> 3.0 |
-| <a name="requirement_template"></a> [template](#requirement\_template) | ~> 2.2.0 |
 
 ## Providers
 
