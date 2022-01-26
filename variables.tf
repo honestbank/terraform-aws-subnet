@@ -28,7 +28,7 @@ variable "aws_role_arn" {
 variable "subnet_tags" {
   description = "Tags"
   type        = map(any)
-  default     = {
+  default = {
     CreatedBy = "terraform-aws-subnet"
   }
 }
