@@ -4,7 +4,7 @@ A simple module that creates subnets for you.
 
 ## How to use:
 
-Make sure you have a vpc and know what region you are in. 
+Make sure you have a vpc and know what region you are in.
 
 Apply below module:
 
@@ -71,4 +71,5 @@ module "aws-subnet" {
 | Name | Description |
 |------|-------------|
 | <a name="output_vpc_id"></a> [vpc\_id](#output\_vpc\_id) | n/a |
+<!-- END_TF_DOCS -->
 <!-- END_TF_DOCS -->

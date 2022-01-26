@@ -18,7 +18,7 @@ variable "vpc_id" {
 variable "subnet_tags" {
   description = "Tags"
   type        = map(any)
-  default     = {
+  default = {
     CreatedBy = "terraform-aws-subnet"
   }
 }

@@ -13,15 +13,9 @@ repos:
     hooks:
       - id: terraform_fmt
       - id: terraform_docs
-      - id: terraform_validate # Disabled due to flakiness
-      - id: terraform_tfsec # Temporarily disabled due to PSP warnings on GKE
-      - id: checkov # Disabled due to crashing
-#  - repo: https://github.com/gitguardian/ggshield
-#    rev: main
-#    hooks:
-#      - id: ggshield
-#        language_version: python3
-#        stages: [commit]
+      - id: terraform_validate
+      - id: terraform_tfsec
+      - id: checkov
   - repo: https://github.com/zricethezav/gitleaks
     rev: v8.2.0
     hooks:
