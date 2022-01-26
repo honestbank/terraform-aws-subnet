@@ -40,6 +40,6 @@ variable "vpc_cidr" {
 
 variable "subnet_az" {
   description = "availability zone"
-  type = string
+  type        = string
   default     = null
 }
