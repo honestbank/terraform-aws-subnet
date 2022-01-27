@@ -15,16 +15,6 @@ variable "vpc_id" {
   default     = null
 }
 
-variable "aws_region" {
-  description = "AWS Region"
-  default     = null
-}
-
-variable "aws_role_arn" {
-  description = "AWS Role ARN"
-  default     = null
-}
-
 variable "subnet_tags" {
   description = "Tags"
   type        = map(any)
