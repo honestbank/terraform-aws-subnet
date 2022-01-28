@@ -4,3 +4,4 @@ subnet_name = "lab-networking-subnet"
 subnet_tags = {
 CreatedBy = "terraform-aws-subnet-lab"
 }
+subnet_az = "ap-southeast-1a"

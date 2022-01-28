@@ -59,6 +59,7 @@ module "aws-subnet" {
 |------|-------------|------|---------|:--------:|
 | <a name="input_aws_region"></a> [aws\_region](#input\_aws\_region) | AWS Region | `any` | `null` | no |
 | <a name="input_aws_role_arn"></a> [aws\_role\_arn](#input\_aws\_role\_arn) | AWS Role ARN | `any` | `null` | no |
+| <a name="input_subnet_az"></a> [subnet\_az](#input\_subnet\_az) | availability zone | `string` | `null` | no |
 | <a name="input_subnet_cidr_block"></a> [subnet\_cidr\_block](#input\_subnet\_cidr\_block) | CIDR block for subnet | `string` | `null` | no |
 | <a name="input_subnet_name"></a> [subnet\_name](#input\_subnet\_name) | Name for subnet | `string` | `null` | no |
 | <a name="input_subnet_tags"></a> [subnet\_tags](#input\_subnet\_tags) | Tags | `map(any)` | <pre>{<br>  "CreatedBy": "terraform-aws-subnet"<br>}</pre> | no |
