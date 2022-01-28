@@ -1,13 +1,16 @@
 package test
 
 import (
+	"context"
 	"fmt"
 	"io/fs"
 	"log"
 	"os"
 	"testing"
 
-	"github.com/gruntwork-io/terratest/modules/aws"
+	"github.com/aws/aws-sdk-go-v2/config"
+	"github.com/aws/aws-sdk-go-v2/service/ec2"
+	"github.com/aws/aws-sdk-go-v2/service/ec2/types"
 	test_structure "github.com/gruntwork-io/terratest/modules/files"
 	"github.com/gruntwork-io/terratest/modules/terraform"
 	"github.com/stretchr/testify/assert"
@@ -43,7 +46,6 @@ const tfWorkspaceEnvVarName = "TF_WORKSPACE"
 const targetWorkspace = "test"
 
 func TestTerraformCodeInfrastructureInitialCredentials(t *testing.T) {
-	Region := "ap-southeast-1"
 	terraformTempDir, errSettingUpTest := setupTest()
 	if errSettingUpTest != nil {
 		t.Fatalf("Error setting up test :%v", errSettingUpTest)
@@ -78,17 +80,39 @@ func TestTerraformCodeInfrastructureInitialCredentials(t *testing.T) {
 		t.Log(fmt.Sprintf("Plan worked: %s", plan))
 	}
 	vpc_id := terraform.Output(t, terraformValidateOptions, "vpc_id")
+	cfg, err := config.LoadDefaultConfig(context.TODO())
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	// Create an Amazon S3 service client
+	client := ec2.NewFromConfig(cfg)
 	t.Run("Test Subnet exists", func(t *testing.T) {
 		a := assert.New(t)
 		//aws.GetVpcById(os.Getenv())
 		var vars map[string]interface{}
 		terraform.GetAllVariablesFromVarFile(t, "terratest.tfvars", &vars)
-		aws.CreateAwsSessionWithCreds(os.Getenv("AWS_ACCESS_KEY_ID"), os.Getenv("AWS_SECRET_ACCESS_KEY"), Region)
-		subnets := aws.GetSubnetsForVpc(t, vpc_id, Region)
+
+		filterName := "vpc-id"
+		subnetOutput, _ := client.DescribeSubnets(
+			context.TODO(),
+			&ec2.DescribeSubnetsInput{
+				Filters: []types.Filter{
+					{
+						Name:   &filterName,
+						Values: []string{vpc_id},
+					},
+				},
+			},
+		)
+
+		subnets := subnetOutput.Subnets
 		exists := false
 		for _, subnet := range subnets {
-			if subnet.Tags["Name"] == vars["subnet_name"].(string) {
-				exists = true
+			if *subnet.Tags[0].Value == vars["subnet_name"].(string) {
+				if *subnet.AvailabilityZone == "ap-southeast-1a" {
+					exists = true
+				}
 			}
 		}
 		a.Equal(true, exists)

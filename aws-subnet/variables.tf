@@ -22,3 +22,9 @@ variable "subnet_tags" {
     CreatedBy = "terraform-aws-subnet"
   }
 }
+
+variable "subnet_az" {
+  description = "availability zone"
+  type = string
+  default     = null
+}
