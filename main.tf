@@ -35,6 +35,7 @@ module "aws-subnet" {
   vpc_id            = aws_vpc.main.id
   subnet_name       = var.subnet_name
   subnet_tags       = var.subnet_tags
+  subnet_az = var.subnet_az
 }
 
 

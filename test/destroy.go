@@ -12,7 +12,11 @@ func destroy(t *testing.T, terraformTempDir string) {
 		TerraformDir: terraformTempDir,
 		VarFiles:     []string{"test/terratest.tfvars"},
 		Vars:         map[string]interface{}{},
-		Reconfigure:  true,
+		EnvVars: map[string]string{
+			"AWS_DEFAULT_REGION": "ap-southeast-1",
+			//"TF_LOG":             "TRACE",
+		},
+		Reconfigure: true,
 	}
 	log.Println("Destroying resources...")
 	terraform.Destroy(t, terraformDestroyOptions)
