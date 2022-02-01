@@ -6,10 +6,6 @@ terraform {
       source  = "hashicorp/aws"
       version = "~> 3.0"
     }
-    template = {
-      source  = "hashicorp/template"
-      version = "~> 2.2.0"
-    }
   }
 }
 
@@ -26,7 +22,7 @@ resource "aws_subnet" "subnet" {
 
   map_public_ip_on_launch = false
   tags = merge({
-    Name = var.subnet_name
+    Name      = var.subnet_name
     CreatedBy = "terraform-aws-subnet"
   }, var.subnet_tags)
 }

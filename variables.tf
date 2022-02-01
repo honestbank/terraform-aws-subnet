@@ -28,7 +28,7 @@ variable "aws_role_arn" {
 variable "subnet_tags" {
   description = "Tags"
   type        = map(any)
-  default     = {
+  default = {
     CreatedBy = "terraform-aws-subnet"
   }
 }
@@ -40,6 +40,6 @@ variable "vpc_cidr" {
 
 variable "subnet_az" {
   description = "availability zone"
-  type = string
+  type        = string
   default     = null
 }

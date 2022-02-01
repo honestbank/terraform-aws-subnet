@@ -2,13 +2,9 @@ terraform {
   required_version = "~> 1.0"
 
   required_providers {
-    aws      = {
+    aws = {
       source  = "hashicorp/aws"
       version = "~> 3.0"
-    }
-    template = {
-      source  = "hashicorp/template"
-      version = "~> 2.2.0"
     }
   }
 }
@@ -35,7 +31,7 @@ module "aws-subnet" {
   vpc_id            = aws_vpc.main.id
   subnet_name       = var.subnet_name
   subnet_tags       = var.subnet_tags
-  subnet_az = var.subnet_az
+  subnet_az         = var.subnet_az
 }
 
 
