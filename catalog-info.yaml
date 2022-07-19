@@ -1,0 +1,13 @@
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: terraform-aws-subnet
+  description: TF Component for creating subnets in Amazon Web Services
+  annotations:
+    github.com/project-slug: honestbank/terraform-aws-subnet
+    github.com/team-slug: honestbank/devops-engineers
+spec:
+  type: tf-component
+  lifecycle: production
+  system: infrastructure
+  owner: group:devops-engineers
