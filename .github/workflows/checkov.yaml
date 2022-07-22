@@ -17,4 +17,4 @@ jobs:
         id: checkov
         uses: bridgecrewio/checkov-action@master
         with:
-          download_external_modules: true
+          config_file: ".checkov.yaml"
