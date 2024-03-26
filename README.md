@@ -20,11 +20,12 @@ module "aws-subnet" {
   subnet_tags       = var.subnet_tags
 }
 ```
+
 `aws_role_arn` is optional and can be set to null (or omitted)
 
 ## Some built in features
 
-* We automatically add the tag `CreatedBy = "terraform-aws-subnet"` to all subnets. As of now, this can't be turned off.
+- We automatically add the tag `CreatedBy = "terraform-aws-subnet"` to all subnets. As of now, this can't be turned off.
 
 <!-- BEGIN_TF_DOCS -->
 ## Requirements
@@ -32,13 +33,13 @@ module "aws-subnet" {
 | Name | Version |
 |------|---------|
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | ~> 1.0 |
-| <a name="requirement_aws"></a> [aws](#requirement\_aws) | ~> 3.0 |
+| <a name="requirement_aws"></a> [aws](#requirement\_aws) | >= 5.0 |
 
 ## Providers
 
 | Name | Version |
 |------|---------|
-| <a name="provider_aws"></a> [aws](#provider\_aws) | 3.73.0 |
+| <a name="provider_aws"></a> [aws](#provider\_aws) | >= 5.0 |
 
 ## Modules
 
