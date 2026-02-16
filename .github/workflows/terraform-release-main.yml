@@ -2,6 +2,8 @@ name: "Terraform - Release"
 on:
   push:
     branches: [main]
+permissions:
+  contents: read
 env:
   tf_version: "latest"
   tf_working_dir: "."
